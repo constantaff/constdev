@@ -22,14 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {
     addForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const newFilm = addInput.value;
+        let newFilm = addInput.value;
         const favorite = checkBox.checked;
 
         if (newFilm) {
-            movieDB.movies.push(newFilm);
-            sortArr(movieDB.movies);
-            createMovieList(movieDB.movies, list);
+            if (newFilm.length > 21) {
+                newFilm = `${newFilm.substring(0, 22)}...`;
+            }
         }
+
+        if (favorite) {
+            console.log("Adding new movie");
+        }
+        movieDB.movies.push(newFilm);
+        sortArr(movieDB.movies);
+
+        createMovieList(movieDB.movies, list);
+
 
         event.target.reset();
     });
@@ -42,34 +51,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createMovieList(films, parent) {
         parent.innerHTML = "";
-        films.movies.sort();
+        sortArr(films);
         films.movies.forEach((film, i) => {
             parent.innerHTML += ` 
-        <li class="promo__interactive-item">№:${i+1} ${film} 
-        <div class="delete"></div>
-        </li>
+                <li class="promo__interactive-item">№:${i+1} ${film} 
+                    <div class="delete"></div>
+                </li>
         `;
-        });
+        });   
 
-
-        const deleteAdv = (arr) => {
-            arr.forEach(item => {
-                item.remove();
+        document.querySelectorAll('.delete').forEach((btn, i) => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
+                movieDB.movies.splice(i, 1);
+                createMovieList(movieDB.films, parent);
             });
-        };
+        });
+    }
 
-
-        const makeChanges = () => {
-            genre.textContent = 'DRAMA';
-            poster.style.backgroundImage = 'url("img/bg.jpg")';
-        };
-
-        createMovieList(movieDB.movies, list);
-        sortArr(movieDB.movies);
-        deleteAdv(adv);
-        makeChanges();
-
+    const deleteAdv = (arr) => {
+        arr.forEach(item => {
+            item.remove();
+        });
     };
+
+
+    const makeChanges = () => {
+        genre.textContent = 'DRAMA';
+        poster.style.backgroundImage = 'url("img/bg.jpg")';
+    };
+
+    createMovieList(movieDB.movies, list);
+    deleteAdv(adv);
+    makeChanges();
+
+
 });
 
 console.log("HellO!");
