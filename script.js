@@ -21,11 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addForm.addEventListener('submit', (event) => {
         event.preventDefault();
+
         const newFilm = addInput.value;
         const favorite = checkBox.checked;
-        movieDB.movies.push(newFilm);
-        sortArr(movieDB.movies);
-        createMovieList(movieDB.movies, list);
+
+        if (newFilm) {
+            movieDB.movies.push(newFilm);
+            sortArr(movieDB.movies);
+            createMovieList(movieDB.movies, list);
+        }
+
         event.target.reset();
     });
 
