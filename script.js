@@ -26,24 +26,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const favorite = checkBox.checked;
 
         if (newFilm) {
+
             if (newFilm.length > 21) {
                 newFilm = `${newFilm.substring(0, 22)}...`;
             }
+            movieDB.movies.push(newFilm);
+            sortArr(movieDB.movies);
+        
+            createMovieList(movieDB.movies, list);
         }
 
         if (favorite) {
-            console.log("Adding new movie");
+            console.log("Adding new film")
         }
-        movieDB.movies.push(newFilm);
-        sortArr(movieDB.movies);
-
-        createMovieList(movieDB.movies, list);
 
 
         event.target.reset();
     });
 
-    console.log("Privet!");
     const sortArr = (arr) => {
         arr.sort();
     };
@@ -52,19 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function createMovieList(films, parent) {
         parent.innerHTML = "";
         sortArr(films);
-        films.movies.forEach((film, i) => {
+        films.forEach((film, i) => {
             parent.innerHTML += ` 
                 <li class="promo__interactive-item">№:${i+1} ${film} 
                     <div class="delete"></div>
                 </li>
-        `;
+            `;
         });   
 
         document.querySelectorAll('.delete').forEach((btn, i) => {
             btn.addEventListener('click', () => {
                 btn.parentElement.remove();
                 movieDB.movies.splice(i, 1);
-                createMovieList(movieDB.films, parent);
+                createMovieList(films, parent);
             });
         });
     }
@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const makeChanges = () => {
         genre.textContent = 'DRAMA';
+
         poster.style.backgroundImage = 'url("img/bg.jpg")';
     };
 
